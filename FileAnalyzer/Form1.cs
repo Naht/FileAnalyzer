@@ -25,48 +25,23 @@ namespace FileAnalyzer
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            Analyzer analyzer = new Analyzer();
+            SetupFileList();
+            analyzer.ParseDirectory(@"C:\Downloads");
 
-            
-            listView1.Scrollable = true;
-            listView1.View = View.Details;
-            ColumnHeader header = new ColumnHeader();
-
-            header.Text = "File Names";
-            
-            listView1.Columns.Add(header);
-
-            List<String> fileList = Directory.EnumerateFiles(@"C:\Downloads").Select(x => Path.GetFileName(x)).ToList();
-            
-
-            
-            IEnumerable<char> distinctSymbols = fileList.
-                Aggregate<String>((x, y)=>x+y).
-                ToCharArray().
-                Distinct().
-                Where(x => !Char.IsLetterOrDigit(x)).
-                OrderByDescending(x=>x);
-            List<string[]> splitNames = fileList.Select(x => x.Split(distinctSymbols.ToArray<char>(), StringSplitOptions.RemoveEmptyEntries)).ToList();
-            HashSet<string> vocab = new HashSet<string>();
-            
-            foreach (string[] tokens in splitNames)
-            {
-                foreach (string token in tokens)
-                {
-                    vocab.Add(token);
-                }
-            }
-            List<string> index = vocab.OrderBy(x => x).ToList();
-            List<List<string>> parsedNames = splitNames.Select(x => x.Select(y => index.FindIndex(z=>z==y).ToString()).ToList()).ToList();
-            //todo: boolean index
-            richTextBox1.Text += new string(distinctSymbols.ToArray());
-            parsedNames.ForEach(x => listView1.Items.Add(x.Aggregate((a, b)=>a+" "+b)));
-            header.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-
-            string maxLength = fileList.Max(x => x.Length).ToString();
-            maxLenText.Text = maxLength;
             Matrix<double> m = Matrix<double>.Build.Random(10, 10);
+            analyzer.ParsedNames.ForEach(x => fileListView.Items.Add(x.Aggregate((a, b) => a + " " + b)));
 
+        }
 
+        private void SetupFileList()
+        {
+            fileListView.Scrollable = true;
+            fileListView.View = View.Details;
+            ColumnHeader header = new ColumnHeader();
+            header.Text = "File Names";
+            header.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+            fileListView.Columns.Add(header);
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)

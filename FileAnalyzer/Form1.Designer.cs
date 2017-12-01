@@ -28,22 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.fileListView = new System.Windows.Forms.ListView();
             this.maxLength = new System.Windows.Forms.Label();
             this.maxLenText = new System.Windows.Forms.TextBox();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.debugData = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // listView1
             // 
-            this.listView1.Alignment = System.Windows.Forms.ListViewAlignment.Left;
-            this.listView1.Location = new System.Drawing.Point(12, 12);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(1198, 484);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.List;
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            this.fileListView.Alignment = System.Windows.Forms.ListViewAlignment.Left;
+            this.fileListView.Location = new System.Drawing.Point(12, 12);
+            this.fileListView.Name = "listView1";
+            this.fileListView.Size = new System.Drawing.Size(1198, 484);
+            this.fileListView.TabIndex = 0;
+            this.fileListView.UseCompatibleStateImageBehavior = false;
+            this.fileListView.View = System.Windows.Forms.View.List;
+            this.fileListView.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
             // maxLength
             // 
@@ -64,21 +64,21 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(12, 548);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(1198, 118);
-            this.richTextBox1.TabIndex = 3;
-            this.richTextBox1.Text = "";
+            this.debugData.Location = new System.Drawing.Point(12, 548);
+            this.debugData.Name = "richTextBox1";
+            this.debugData.Size = new System.Drawing.Size(1198, 118);
+            this.debugData.TabIndex = 3;
+            this.debugData.Text = "";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1222, 678);
-            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.debugData);
             this.Controls.Add(this.maxLenText);
             this.Controls.Add(this.maxLength);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.fileListView);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -89,10 +89,10 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView fileListView;
         private System.Windows.Forms.Label maxLength;
         private System.Windows.Forms.TextBox maxLenText;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox debugData;
     }
 }
 
