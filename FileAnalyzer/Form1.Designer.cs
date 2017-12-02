@@ -34,15 +34,17 @@
             this.debugData = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
-            // listView1
+            // fileListView
             // 
             this.fileListView.Alignment = System.Windows.Forms.ListViewAlignment.Left;
+            this.fileListView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.fileListView.Location = new System.Drawing.Point(12, 12);
-            this.fileListView.Name = "listView1";
-            this.fileListView.Size = new System.Drawing.Size(1198, 484);
+            this.fileListView.Name = "fileListView";
+            this.fileListView.Size = new System.Drawing.Size(1230, 504);
             this.fileListView.TabIndex = 0;
             this.fileListView.UseCompatibleStateImageBehavior = false;
-            this.fileListView.View = System.Windows.Forms.View.List;
+            this.fileListView.View = System.Windows.Forms.View.Details;
             this.fileListView.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
             // maxLength
@@ -62,11 +64,13 @@
             this.maxLenText.Size = new System.Drawing.Size(100, 20);
             this.maxLenText.TabIndex = 2;
             // 
-            // richTextBox1
+            // debugData
             // 
+            this.debugData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.debugData.Location = new System.Drawing.Point(12, 548);
-            this.debugData.Name = "richTextBox1";
-            this.debugData.Size = new System.Drawing.Size(1198, 118);
+            this.debugData.Name = "debugData";
+            this.debugData.Size = new System.Drawing.Size(1230, 139);
             this.debugData.TabIndex = 3;
             this.debugData.Text = "";
             // 
@@ -74,7 +78,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1222, 678);
+            this.ClientSize = new System.Drawing.Size(1254, 699);
             this.Controls.Add(this.debugData);
             this.Controls.Add(this.maxLenText);
             this.Controls.Add(this.maxLength);
