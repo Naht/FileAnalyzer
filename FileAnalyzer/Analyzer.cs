@@ -6,11 +6,20 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MathNet.Numerics.Statistics;
 
 namespace FileAnalyzer
 {
     class Analyzer
     {
+        public List<List<Vector<double>>> CentroidHistory { get; set; }
+        public List<List<int>> AssignedClusterHistory { get; set; }
+        public List<double> Estimate { get; set; }
+
+        public List<int> BestClustering { get; set; }
+
+        public List<int> AssignedClusters { get; set; }
+        public List<Vector<double>> Centroids { get; set; }
         public List<string> FileList { get; set; }
         public List<string> Vocab { get; set; }
         public List<List<string>> ParsedNames { get; set; }
@@ -44,10 +53,118 @@ namespace FileAnalyzer
                 .Aggregate((x, y) => x.Concat(y))
                 .ToArray();
             Input = CreateMatrix.Dense(Vocab.Count, ParsedNames.Count, v).Transpose();
-            String s3 = ";";
+
+       
+       
             
         }
 
+        private void InitCentroids(int centroidCount)
+        {
+
+            Centroids = new List<Vector<double>>();
+            Random r = new Random();
+            for (int i = 0; i < centroidCount; i++)
+            {
+                Centroids.Add(Input.Row(r.Next(Input.RowCount)));
+            }
+        }
+
+        public void RunKMeans(int numberOfCentroids)
+        {
+            InitCentroids(numberOfCentroids);
+            AssignToClusters();
+            for (int i = 0; i < 10; i++)
+            {
+                ComputeNewCentroids();
+                
+            }
+            
+
+        }
+        public void RunKMeans()
+        {
+            Estimate = new List<double>();
+            AssignedClusterHistory = new List<List<int>>();
+            CentroidHistory = new List<List<Vector<double>>>();
+            for (int i = 2; i<20; i++)
+            {
+                RunKMeans(i);
+                Estimate.Add(ComputeEstimate());
+                AssignedClusterHistory.Add(AssignedClusters);
+                CentroidHistory.Add(Centroids);
+            }
+
+            BestClustering = AssignedClusterHistory[Estimate.FindIndex(x=>x==Estimate.Min())];
+        }
+
+        private double ComputeEstimate()
+        {
+            double result = 0;
+            for(int c = 0; c<Centroids.Count; c++)
+            {
+                foreach (double[] item in GetClusterOfInput(c))
+                {
+                    result += (CreateVector.Dense(item) - Centroids[c]).L2Norm();
+                } 
+            }
+            return result/Centroids.Count;
+        }
+
+        private void AssignToClusters()
+        {
+            AssignedClusters = new List<int>(Enumerable.Repeat(0, Input.RowCount));
+            
+            for(int i = 0; i < Input.RowCount; i++)
+            {
+                double minDist = double.PositiveInfinity;
+                double dist = 0;
+                for(int c = 0; c< Centroids.Count; c++)
+                {
+                    dist = (Input.Row(i) - Centroids[c]).L2Norm();
+                    if (minDist>dist)
+                    {
+                        minDist = dist;
+                        AssignedClusters[i] = c;
+                    }
+                }
+
+            }
+        }
+
+        private void ComputeNewCentroids()
+        {
+            for (int c = 0; c < Centroids.Count; c++)
+            {
+                
+                int[] clusterIndex =  AssignedClusters.FindAllIndexof(c);
+                List<double[]> clusterRows = Input.ToRowArrays().Where((x, i) => clusterIndex.Contains(i)).ToList();
+
+                List<double> newCentroid = new List<double>(Enumerable.Repeat(0.0, Input.ColumnCount));
+                for (int j = 0; j < clusterRows.Count; j++)
+                {
+                    for (int i = 0; i < Input.ColumnCount; i++)
+                    {
+                        newCentroid[i] = (newCentroid[i] + clusterRows[j][i])/2;
+                    }
+                }
+                Centroids[c] = CreateVector.Dense(newCentroid.ToArray());
+                
+
+               
+                
+            }
+        }
+
+        public List<double[]> GetClusterOfInput(int clusterNumber)
+        {
+            return Input.ToRowArrays().Where((x, i) => AssignedClusters.FindAllIndexof(clusterNumber).Contains(i)).ToList();
+        }
+
+        public List<string> GetCluster(int clusterNumber)
+        {
+            return FileList.Where((x, i) => BestClustering.FindAllIndexof(clusterNumber).Contains(i)).ToList();
+        }
         
     }
 }
